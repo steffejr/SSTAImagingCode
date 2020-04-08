@@ -29,21 +29,28 @@ def main():
     Visitid = "V%03d"%(int(Visitid)) 
     # What are the data folders?
     RawMRIFolder, ProcMRIFolder, VisRawMRIFolder, VisProcMRIFolder = DataFolders(BaseDir, PartID, Visitid)
-    # Check to see if this participant is already in teh system
+    # Check to see if this participant is already in the system
     success = CheckIfParticipantIsInSystem(RawMRIFolder, ProcMRIFolder, PartID)
     # Ask the user if they want to continue if this part is in the system
     if not success:
-        response = messagebox.askyesno('Partcipant: %s'%(PartID),'This participant is already in system. Do you want to continue?')
+        response = messagebox.askyesno('Participant: %s'%(PartID),'This participant is already in system. Do you want to continue?')
         if not response:
             return
-    # Check to see if this VISIT is already in teh system
+    # Check to see if this VISIT is already in the system
     success = CheckIfVisitIsInSystem(VisRawMRIFolder, VisProcMRIFolder, PartID)
     # Ask the user if they want to continue if this part is in the system
     if not success:
-        response = messagebox.askyesno('Partcipant: %s, Visit: %s'%(PartID, Visitid),'This VISIT is already in system. Do you want to continue?')
+        response = messagebox.askyesno('Participant: %s, Visit: %s'%(PartID, Visitid),'This VISIT is already in system. Do you want to continue?')
         if not response:
             return
-
+    # Should previously reconstructed data be overwritten?
+    OverWriteFlag = messagebox.askyesno('Overwrite','When reconstructing data should existing data be overwritten?')
+    if OverWriteFlag:
+        OverWriteFlag = messagebox.askyesno('Sure?','Are you sure you want to overwrite?')
+    if OverWriteFlag:
+        print('Existing data will be overwritten')
+        
+    
     # Find the zip file of data
     PathToZipInput = PickZipdataFile()
     # Move the zip file
@@ -221,6 +228,8 @@ def MoveAllFiles(AllImports, RawMRIFolder, VisProcMRIFolder, PartID, Visitid):
             # Create the name of the file
             OutFileName =  "%s_%s_%s.%s"%(PartID,Visitid,i['FileNameTag'], i['Extension'])
             # Create the output path for the file
+            # Add another parameter to the AllImports structure naming the ouput folder
+            # which allows multiple images to reconstruct to the same folder
             OutFilePath = os.path.join(VisProcMRIFolder, i['FileNameTag'])
             MoveFile(filename, OutFileName, OutFilePath, i['FileNameTag'])
 
