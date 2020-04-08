@@ -66,12 +66,10 @@ def main():
     MakeStatsFolders(VisProcMRIFolder)
     messagebox.showinfo('Done','All Done with: %s, %s'%(PartID, Visitid))
     
-def FindBaseDirectory(LabName, StudyName):
-    # Start with this script's folder
-    ThisScript = os.path.dirname(os.path.realpath(__file__))
+def FindBaseDirectory(LabName, StudyName, DataPath):
     # Now find the Base folder
     # First, split the path
-    splitThisScript = ThisScript.split(os.path.sep)
+    splitThisScript = DataPath.split(os.path.sep)
     # Find where the lab name is
     ind = splitThisScript.index(LabName)
     BaseDir = os.path.join(*splitThisScript[0:ind+1])

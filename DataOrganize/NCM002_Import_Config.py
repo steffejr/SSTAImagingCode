@@ -2,8 +2,13 @@
 # I do not need a separate folder for images that should stay together. 
 # As an example, DTI and the two images for topup adjustment.
 
+# What is the name of the lab. We use this as a top level folder name 
 LabName = 'NCMLab'
+# Within the lab folder there is study folder
 StudyName = 'NCM002-MRIStudy'
+# What is the 
+DataPath = '/media/jsteffener/Data002/NCMLab'
+
 # This is path the dcm2nii 
 # I anticipate since this file is saved in a synced folder that there should not be
 # multiple copies of this file on each computer. This may be a problem if there
