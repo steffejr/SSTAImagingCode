@@ -1,0 +1,41 @@
+mkdir DMSRun1
+cd DMSRun1
+mkdir Original
+mkdir spm12
+cd ..
+
+mkdir DMSRun2
+cd DMSRun2
+mkdir Original
+mkdir spm12
+cd ..
+
+mkdir VSTMRun1
+cd VSTMRun1
+mkdir Original
+mkdir spm12
+cd ..
+
+mkdir VSTMRun2
+cd VSTMRun2
+mkdir Original
+mkdir spm12
+cd ..
+
+mkdir VSTMRun1
+cd VSTMRun1
+mkdir Original
+mkdir spm12
+cd ..
+
+mkdir NBackRunl
+cd NBackRunl
+mkdir Original
+mkdir spm12
+cd ..
+
+mkdir NBackRun2
+cd NBackRun2
+mkdir Original
+mkdir spm12
+cd ..

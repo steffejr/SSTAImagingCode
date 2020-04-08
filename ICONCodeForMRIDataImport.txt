@@ -1,0 +1,10 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=true
+Icon[en_CA]=python3
+Name[en_CA]=test1
+Exec=/home/jsteffen/.local/share/canopy/edm/envs/User/bin/python3 ~/Documents/GitHub/ImagingCode/DataOrganize/MRIDataImport.py
+Name=test1
+Icon=python3
