@@ -15,6 +15,9 @@ _thisDir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(_thisDir))
 from NCM002_Import_Config import *
 
+# Make this function also operate on existing data. So it would ask the user if 
+# existing data should be overwritten or not. New data will be added to an existing folder structure
+
 def main():
 
     # Find the base directory for data storage

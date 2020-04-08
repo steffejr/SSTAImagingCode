@@ -1,3 +1,7 @@
+# It would be great to have this setup also take folder names. This is because 
+# I do not need a separate folder for images that should stay together. 
+# As an example, DTI and the two images for topup adjustment.
+
 LabName = 'NCMLab'
 StudyName = 'NCM002-MRIStudy'
 # This is path the dcm2nii 
