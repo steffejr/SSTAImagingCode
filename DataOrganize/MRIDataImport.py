@@ -15,11 +15,7 @@ _thisDir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(_thisDir))
 from NCM002_Import_Config import *
 
-# Make this function also operate on existing data. So it would ask the user if 
-# existing data should be overwritten or not. New data will be added to an existing folder structure
-#
-# TEST BRANCH
-#
+
 def main():
 
     # Find the base directory for data storage
@@ -43,13 +39,16 @@ def main():
         response = messagebox.askyesno('Participant: %s, Visit: %s'%(PartID, Visitid),'This VISIT is already in system. Do you want to continue?')
         if not response:
             return
-    # Should previously reconstructed data be overwritten?
-    OverWriteFlag = messagebox.askyesno('Overwrite','When reconstructing data should existing data be overwritten?')
-    if OverWriteFlag:
-        OverWriteFlag = messagebox.askyesno('Sure?','Are you sure you want to overwrite?')
-    if OverWriteFlag:
-        print('Existing data will be overwritten')
+    # # Should previously reconstructed data be overwritten?
+    # OverWriteFlag = messagebox.askyesno('Overwrite','When reconstructing data should existing data be overwritten?')
+    # if OverWriteFlag:
+    #     OverWriteFlag = messagebox.askyesno('Sure?','Are you sure you want to overwrite?')
+    # if OverWriteFlag:
+    #     print('Existing data will be overwritten')
         
+    # Take an already reconstructed data set in the Raw folder and rename and copy 
+    # any missing files to the Proc folder
+    
     
     # Find the zip file of data
     PathToZipInput = PickZipdataFile()
@@ -204,15 +203,15 @@ def CheckIfVisitIsInSystem(VisRawMRIFolder, VisProcMRIFolder, VisitID):
         success = False
     return success
 
-def MoveFile(FilePath, VisProcMRIFolder, Subid, Visitid, Type, Ext = 'nii'):
-    # make the folder
-    # make new name
-
-    OutName = "%s_%s_%s.%s"%(Subid,Visitid,Type, Ext)
-    os.mkdir(os.path.join(VisProcMRIFolder,Type))
-    os.mkdir(os.path.join(VisProcMRIFolder,Type,ProcessedNIIFileFolderName))
-    shutil.copy(FilePath,os.path.join(VisProcMRIFolder,Type,OutName))
-    shutil.copy(FilePath,os.path.join(VisProcMRIFolder,Type,ProcessedNIIFileFolderName,OutName))
+# def MoveFile(FilePath, VisProcMRIFolder, Subid, Visitid, Type, Ext = 'nii'):
+#     # make the folder
+#     # make new name
+# 
+#     OutName = "%s_%s_%s.%s"%(Subid,Visitid,Type, Ext)
+#     os.mkdir(os.path.join(VisProcMRIFolder,Type))
+#     os.mkdir(os.path.join(VisProcMRIFolder,Type,ProcessedNIIFileFolderName))
+#     shutil.copy(FilePath,os.path.join(VisProcMRIFolder,Type,OutName))
+#     shutil.copy(FilePath,os.path.join(VisProcMRIFolder,Type,ProcessedNIIFileFolderName,OutName))
 
 def NIIFile():
     # Ask the user to select the zip file
