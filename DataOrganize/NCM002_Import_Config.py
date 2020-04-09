@@ -60,70 +60,95 @@ thisEntry = {'Name' : 'T1',
         'SearchString' : 'MEMPRAGE',
         'FileNameTag' : 'T1',
         'Foldername' : 'T1',        
-        'Extension' : 'nii'}       
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True}       
 AllImports.append(thisEntry)
+
+thisEntry = {'Name' : 'fMRI Phase Mapping A>>P',
+        'SearchString' : 'fMRIRefAP',
+        'FileNameTag' : 'fMRI_Phase_AP',
+        'Foldername' : 'fMRI_Phase',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':False}               
+AllImports.append(thisEntry)       
+
+thisEntry = {'Name' : 'fMRI Phase Mapping P>>A',
+        'SearchString' : 'fMRIRefPA',
+        'FileNameTag' : 'fMRI_Phase_PA',
+        'Foldername' : 'fMRI_Phase',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':False}               
+AllImports.append(thisEntry)       
+
 
 thisEntry = {'Name' : 'DMS First Administration',
         'SearchString' : 'fMRI',
         'FileNameTag' : 'DMSRun1',
         'Foldername': 'DMSRun1',
-        'Extension' : 'nii'}       
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True}       
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'DMS Second Administration',
         'SearchString' : 'fMRI',
         'FileNameTag' : 'DMSRun2',
         'Foldername' : 'DMSRun2',        
-        'Extension' : 'nii'}       
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True}       
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'VSTM First Administration',
         'SearchString' : 'fMRI',
         'FileNameTag' : 'VSTMRun1',
         'Foldername' : 'VSTMRun1',        
-        'Extension' : 'nii'}       
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True}       
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'VSTM Second Administration',
         'SearchString' : 'fMRI',
         'FileNameTag' : 'VSTMRun2',
         'Foldername' : 'VSTMRun2',        
-        'Extension' : 'nii'}       
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True}       
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'N-Back First Administration',
         'SearchString' : 'fMRI',
         'FileNameTag' : 'NBackRun1',
         'Foldername' : 'NBackRun1',        
-        'Extension' : 'nii'}       
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True}       
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'N-Back Second Administration',
         'SearchString' : 'fMRI',
         'FileNameTag' : 'NBackRun2',
         'Foldername' : 'NBackRun2',        
-        'Extension' : 'nii'}       
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True}       
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'ASL',
         'SearchString' : '3DASL',
         'FileNameTag' : 'ASL',
         'Foldername' : 'ASL',        
-        'Extension' : 'nii'}       
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True}       
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'ASL M0',
         'SearchString' : 'M03DASL',
         'FileNameTag' : 'ASLM0',
-        'Foldername' : 'ASLM0',        
-        'Extension' : 'nii'}       
+        'Foldername' : 'ASL',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':False}       
 AllImports.append(thisEntry)  
 
 thisEntry = {'Name' : 'NeuroMel',
         'SearchString' : 'goldStarNM',
         'FileNameTag' : 'NeuroMel',
         'Foldername' : 'NeuroMel',        
-        'Extension' : 'nii'}      
-        
-
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True}      
 AllImports.append(thisEntry)      
