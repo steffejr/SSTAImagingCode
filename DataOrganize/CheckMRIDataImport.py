@@ -1,6 +1,7 @@
 import os
 import sys
 import shutil
+import glob
 import tkinter as tk
 from tkinter import simpledialog
 from tkinter.filedialog import askopenfilename
@@ -77,9 +78,18 @@ def CheckAllFiles(AllImports, VisProcMRIFolder, PartID, Visitid):
         if os.path.exists(ExpectedFilePath):
             FoundFlag.append(1)
         else:
+            # If it is not in the Proc folder, check to see if there is anythin 
+            # in the Raw data folder
+            RawMRIFolder = os.path.join(BaseDir,"RawMRIData",PartID,Visitid)
+        
             # Add functionality for what to do if it is missing!
             FoundFlag.append(0)
-            FindAndMoveFile(i, BaseDir, PartID, Visitid,VisProcMRIFolder)
+            print('%s Missing file: %s'%(PartID,OutFileName))            
+            # If a file is found to be missing, check to see if it is sitting in teh Raw data folder.
+
+            # FoundFiles = glob.glob(os.path.join(RawMRIFolder, '*'+i['SearchString']+'*.nii'))            
+            # if len(FoundFiles) > 0:
+            #     FindAndMoveFile(i, BaseDir, PartID, Visitid,VisProcMRIFolder)
     return FoundFlag
 
 

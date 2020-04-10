@@ -1,6 +1,6 @@
 import glob
 i = AllImports[3]
-PartID = '1002013'
+PartID = '1002043'
 Visitid = 'V001'
 
 VisProcMRIFolder = os.path.join(BaseDir,"ProcMRIData",PartID,Visitid)
@@ -29,3 +29,8 @@ else:
             MRIDataImport.MoveFile(filename, OutFileName, OutFilePath, i['FileNameTag'])
 
     
+    
+
+
+RawMRIFolder = os.path.join(BaseDir,"RawMRIData",PartID,Visitid)
+glob.glob(os.path.join(RawMRIFolder, '*'+i['SearchString']+'*.nii'))

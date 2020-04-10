@@ -14,12 +14,12 @@ _thisDir = os.path.dirname(os.path.abspath(__file__))
 # import parameters from a config file
 sys.path.append(os.path.join(_thisDir))
 from NCM002_Import_Config import *
-
+DataPath
 
 def main():
 
     # Find the base directory for data storage
-    BaseDir = FindBaseDirectory(LabName, StudyName)
+    BaseDir = FindBaseDirectory(LabName, StudyName, DataPath)
     # Find the participant ID
     PartID, Visitid = GetParticipantID()
     Visitid = "V%03d"%(int(Visitid)) 
@@ -52,12 +52,20 @@ def main():
     
     # Find the zip file of data
     PathToZipInput = PickZipdataFile()
+    # Add a check here. If the user does NOT pick a zip file the program can check 
+    # to see if the raw data was already downloaded and unzipped.
+    # It is possible that we may wish to simply re-reconstruct the raw data
     # Move the zip file
-    PathToZipInput = MoveZipFile(PathToZipInput, VisRawMRIFolder)
-    # Unzip the data file
-    UnZipData(PathToZipInput)
-    # untar the data file
-    CreatedDataFolder = UnTarData(VisRawMRIFolder, PathToZipInput)
+    if len(PathToZipInput) > 0:
+        print('Path to zip file: %s'%(PathToZipInput))
+        PathToZipInput = MoveZipFile(PathToZipInput, VisRawMRIFolder)
+
+        # Unzip the daPathToZipInputta file
+        UnZipData(PathToZipInput)
+        # untar the data file
+        CreatedDataFolder = UnTarData(VisRawMRIFolder, PathToZipInput)
+    else:
+        CreatedDataFolder = os.path.join(VisRawMRIFolder,os.listdir(VisRawMRIFolder)[0])
     # reconstruct the data
     ReconstructMRIData(VisRawMRIFolder, CreatedDataFolder)
     # Rename and move all files
@@ -118,6 +126,7 @@ def DataFolders(BaseDir, Subid, Visitid):
     return RawMRIFolder, ProcMRIFolder, VisRawMRIFolder, VisProcMRIFolder
 
 def ReconstructMRIData(VisRawMRIFolder, CreatedZipFolder):
+    print('Reconstructing data...')
     LogFileLocation = os.path.join(VisRawMRIFolder, 'ReconstructionLog.txt')
     #os.system("/Applications/mricron/ -d N -e Y -f N -g N -i N -n Y -o %s %s"%(VisRawMRIFolder,os.path.join(VisRawMRIFolder,os.path.basename(sys.argv[3]).split('.')[0])))
     os.system("/usr/bin/dcm2nii -d N -e Y -f N -g N -i N -n Y -t Y -o %s %s > %s"%(VisRawMRIFolder,CreatedZipFolder, LogFileLocation))
