@@ -79,13 +79,10 @@ def CheckAllFiles(AllImports, VisProcMRIFolder, PartID, Visitid):
         else:
             # Add functionality for what to do if it is missing!
             FoundFlag.append(0)
+            FindAndMoveFile(i, BaseDir, PartID, Visitid,VisProcMRIFolder)
     return FoundFlag
 
-def FindMissingData(PartID, Visitid):
-    # Got to the subject's raw data folder and see if the NII file exists. 
-    # Check to see if the Proc folder exists
-    
-    pass
+
         
 def MakeListOfImportFiles(AllImports):
     # Make the column names for the table of found data
@@ -95,10 +92,22 @@ def MakeListOfImportFiles(AllImports):
     for i in AllImports:
         ImportList.append(i['FileNameTag'] + '_' + i['Extension'])
     return ImportList
-        
+    
+def FindAndMoveFile(i, BaseDir, PartID, Visitid,VisProcMRIFolder):
+    RawMRIFolder = os.path.join(BaseDir,"RawMRIData",PartID,Visitid)
+    filename = MRIDataImport.SelectOneFile(i, RawMRIFolder)
+    if len(filename) > 0:
+        # Create the name of the file
+        OutFileName =  "%s_%s_%s.%s"%(PartID,Visitid,i['FileNameTag'], i['Extension'])
+        # Create the output path for the file
+        # Add another parameter to the AllImports structure naming the ouput folder
+        # which allows multiple images to reconstruct to the same folder
+        OutFilePath = os.path.join(VisProcMRIFolder, i['FileNameTag'])
+        MRIDataImport.MoveFile(filename, OutFileName, OutFilePath, i['FileNameTag'])
+                
 if __name__ == "__main__":
     BaseDir = MRIDataImport.FindBaseDirectory(LabName, StudyName, DataPath)
     df = MakeListOfAllParticipants(BaseDir, AllImports)
     OutFileName = os.path.join(os.path.split(BaseDir)[0:-1][0],'SummaryData','MRIProcDataStatus.csv')
     df.to_csv(OutFileName)    
-#     main()
+# #     main()

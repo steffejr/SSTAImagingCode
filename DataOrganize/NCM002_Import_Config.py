@@ -9,6 +9,7 @@ StudyName = 'NCM002-MRIStudy'
 # What is the 
 DataPath = '/media/jsteffener/Data002/NCMLab'
 
+DataPath = '/Volumes/GoogleDrive/Shared drives/NCMLab'
 # This is path the dcm2nii 
 # I anticipate since this file is saved in a synced folder that there should not be
 # multiple copies of this file on each computer. This may be a problem if there
