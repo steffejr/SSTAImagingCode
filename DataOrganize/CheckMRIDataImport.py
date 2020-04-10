@@ -96,9 +96,9 @@ def MakeListOfImportFiles(AllImports):
         ImportList.append(i['FileNameTag'] + '_' + i['Extension'])
     return ImportList
         
-if __name__ == "__main__":
-    BaseDir = MRIDataImport.FindBaseDirectory(LabName, StudyName, DataPath)
-    df = MakeListOfAllParticipants(BaseDir, AllImports)
-    OutFileName = os.path.join(os.path.split(BaseDir)[0:-1][0],'SummaryData','MRIProcDataStatus.csv')
-    df.to_csv(OutFileName)    
-#     main()
+# if __name__ == "__main__":
+#     BaseDir = MRIDataImport.FindBaseDirectory(LabName, StudyName, DataPath)
+#     df = MakeListOfAllParticipants(BaseDir, AllImports)
+#     OutFileName = os.path.join(os.path.split(BaseDir)[0:-1][0],'SummaryData','MRIProcDataStatus.csv')
+#     df.to_csv(OutFileName)    
+# #     main()
