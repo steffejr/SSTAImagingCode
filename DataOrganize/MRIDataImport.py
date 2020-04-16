@@ -79,8 +79,10 @@ def FindBaseDirectory(LabName, StudyName, DataPath):
     # First, split the path
     splitThisScript = DataPath.split(os.path.sep)
     # Find where the lab name is
-    ind = splitThisScript.index(LabName)
-    BaseDir = os.path.join(*splitThisScript[0:ind+1])
+    # This also works if the lab name is in tha path name more then once. If so 
+    # the last time it appears is used.
+    indices = [i for i, x in enumerate(splitThisScript) if x == LabName]
+    BaseDir = os.path.join(*splitThisScript[0:indices[-1]+1])
     BaseDir = os.path.join(os.path.sep, BaseDir, StudyName, 'Data', 'Imaging')
     return BaseDir
 

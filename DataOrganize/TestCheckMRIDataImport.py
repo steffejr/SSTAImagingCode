@@ -1,6 +1,7 @@
 import glob
-i = AllImports[3]
-PartID = '1002013'
+
+i = AllImports[6]
+PartID = '2002045'
 Visitid = 'V001'
 
 VisProcMRIFolder = os.path.join(BaseDir,"ProcMRIData",PartID,Visitid)

@@ -9,7 +9,7 @@ StudyName = 'NCM002-MRIStudy'
 # What is the 
 DataPath = '/media/jsteffener/Data002/NCMLab'
 
-DataPath = '/Volumes/GoogleDrive/Shared drives/NCMLab'
+# DataPath = '/Volumes/GoogleDrive/Shared drives/NCMLab'
 # This is path the dcm2nii 
 # I anticipate since this file is saved in a synced folder that there should not be
 # multiple copies of this file on each computer. This may be a problem if there
@@ -33,7 +33,8 @@ thisEntry = {'Name' : 'DTI',
         'SearchString' : 'diff64dir',
         'FileNameTag' : 'DTI',                
         'Foldername' : 'DTI',          
-        'Extension' : 'nii'}       
+        'Extension' : 'nii',
+        'ReconPathName':'diff_64dir_AP'}       
 AllImports.append(thisEntry)
 
 thisEntry = {'Name' : 'DTI bvec',
@@ -54,7 +55,8 @@ thisEntry = {'Name' : 'DTI Diff P>>A',
         'SearchString' : 'diffPA',
         'FileNameTag' : 'DTI_DiffPA',
         'Foldername' : 'DTI',        
-        'Extension' : 'nii'}               
+        'Extension' : 'nii',
+        'ReconPathName':'diff_PA'}               
 AllImports.append(thisEntry)           
 
 thisEntry = {'Name' : 'T1',
@@ -62,7 +64,8 @@ thisEntry = {'Name' : 'T1',
         'FileNameTag' : 'T1',
         'Foldername' : 'T1',        
         'Extension' : 'nii',
-        'NeedAnalysisFolder':True}       
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'MEMPRAGE'}       
 AllImports.append(thisEntry)
 
 thisEntry = {'Name' : 'fMRI Phase Mapping A>>P',
@@ -70,7 +73,8 @@ thisEntry = {'Name' : 'fMRI Phase Mapping A>>P',
         'FileNameTag' : 'fMRI_Phase_AP',
         'Foldername' : 'fMRI_Phase',        
         'Extension' : 'nii',
-        'NeedAnalysisFolder':False}               
+        'NeedAnalysisFolder':False,
+        'ReconPathName':'fMRI_Ref_AP'}               
 AllImports.append(thisEntry)       
 
 thisEntry = {'Name' : 'fMRI Phase Mapping P>>A',
@@ -78,7 +82,8 @@ thisEntry = {'Name' : 'fMRI Phase Mapping P>>A',
         'FileNameTag' : 'fMRI_Phase_PA',
         'Foldername' : 'fMRI_Phase',        
         'Extension' : 'nii',
-        'NeedAnalysisFolder':False}               
+        'NeedAnalysisFolder':False,
+        'ReconPathName':'fMRI_Ref_PA'}               
 AllImports.append(thisEntry)       
 
 
@@ -87,7 +92,8 @@ thisEntry = {'Name' : 'DMS First Administration',
         'FileNameTag' : 'DMSRun1',
         'Foldername': 'DMSRun1',
         'Extension' : 'nii',
-        'NeedAnalysisFolder':True}       
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'fMRI_2.5mm'}       
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'DMS Second Administration',
@@ -95,7 +101,8 @@ thisEntry = {'Name' : 'DMS Second Administration',
         'FileNameTag' : 'DMSRun2',
         'Foldername' : 'DMSRun2',        
         'Extension' : 'nii',
-        'NeedAnalysisFolder':True}       
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'fMRI_2.5mm'}       
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'VSTM First Administration',
@@ -103,7 +110,8 @@ thisEntry = {'Name' : 'VSTM First Administration',
         'FileNameTag' : 'VSTMRun1',
         'Foldername' : 'VSTMRun1',        
         'Extension' : 'nii',
-        'NeedAnalysisFolder':True}       
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'fMRI_2.5mm'}       
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'VSTM Second Administration',
@@ -111,7 +119,8 @@ thisEntry = {'Name' : 'VSTM Second Administration',
         'FileNameTag' : 'VSTMRun2',
         'Foldername' : 'VSTMRun2',        
         'Extension' : 'nii',
-        'NeedAnalysisFolder':True}       
+        'NeedAnalysisFolder':True,    
+        'ReconPathName':'fMRI_2.5mm'}
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'N-Back First Administration',
@@ -119,7 +128,8 @@ thisEntry = {'Name' : 'N-Back First Administration',
         'FileNameTag' : 'NBackRun1',
         'Foldername' : 'NBackRun1',        
         'Extension' : 'nii',
-        'NeedAnalysisFolder':True}       
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'fMRI_2.5mm'}               
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'N-Back Second Administration',
@@ -127,7 +137,8 @@ thisEntry = {'Name' : 'N-Back Second Administration',
         'FileNameTag' : 'NBackRun2',
         'Foldername' : 'NBackRun2',        
         'Extension' : 'nii',
-        'NeedAnalysisFolder':True}       
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'fMRI_2.5mm'}
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'ASL',
@@ -135,7 +146,8 @@ thisEntry = {'Name' : 'ASL',
         'FileNameTag' : 'ASL',
         'Foldername' : 'ASL',        
         'Extension' : 'nii',
-        'NeedAnalysisFolder':True}       
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'3DASL_multi'}
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'ASL M0',
@@ -143,7 +155,8 @@ thisEntry = {'Name' : 'ASL M0',
         'FileNameTag' : 'ASLM0',
         'Foldername' : 'ASL',        
         'Extension' : 'nii',
-        'NeedAnalysisFolder':False}       
+        'NeedAnalysisFolder':False,
+        'ReconPathName':'M0_3DASL'}    
 AllImports.append(thisEntry)  
 
 thisEntry = {'Name' : 'NeuroMel',
@@ -151,5 +164,6 @@ thisEntry = {'Name' : 'NeuroMel',
         'FileNameTag' : 'NeuroMel',
         'Foldername' : 'NeuroMel',        
         'Extension' : 'nii',
-        'NeedAnalysisFolder':True}      
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'goldStar_NM'}      
 AllImports.append(thisEntry)      
