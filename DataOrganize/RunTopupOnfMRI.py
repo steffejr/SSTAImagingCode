@@ -10,7 +10,7 @@ from NCM002_Import_Config import *
 import MRIDataImport
 
 BaseDir = MRIDataImport.FindBaseDirectory(LabName, StudyName, DataPath)
-PartID = '2002036'
+PartID = '1002023'
 Visitid = 'V001'
 
 # Find the Expected Files 
@@ -56,11 +56,18 @@ if os.path.exists(PAFilePath) and os.path.exists(APFilePath):
     # Make the acquisitions file
     AcqFilePath = os.path.join(APPath, 'datain.txt')
     fid = open(AcqFilePath, 'w')
-    fid.write('0 1 0 0.0448')
+    fid.write('0 1 0 0.043632')
     fid.write('\n')
-    fid.write('0 -1 0 0.0448')
+    fid.write('0 -1 0 0.043632')
     fid.write('\n')
     fid.close()
+    ApplyAcqFilePath = os.path.join(APPath, 'ApplyDatain.txt')
+    fid = open(ApplyAcqFilePath, 'w')
+    fid.write('0 1 0 0.010908')
+    fid.write('\n')
+    fid.write('0 -1 0 0.010908')
+    fid.write('\n')
+    fid.close()    
     # Run topup
     UnwarpedFilePath = os.path.join(APPath, "%s_%s_%s"%(PartID,Visitid,'fMRI_Phase_unwarped'))
     Str = 'topup --imain=%s --datain=%s --config=b02b0.cnf --fout=my_fieldmap --out=%s'%(MergedAPPAFilePath, AcqFilePath, UnwarpedFilePath)
@@ -75,7 +82,7 @@ if os.path.exists(PAFilePath) and os.path.exists(APFilePath):
     count = 0
     for i in AllImports:
         if i['SearchString'] == 'fMRI':
-            while count < 1:
+            # while count < 1:
                 count += 1
                 print('\t>>> Working on %s'%(i['FileNameTag']))
                 InDataPath = os.path.join(BaseDir, 'ProcMRIData', PartID, Visitid, i['Foldername'],ProcessedNIIFileFolderName)
@@ -92,7 +99,7 @@ if os.path.exists(PAFilePath) and os.path.exists(APFilePath):
                     
                 OutDataName = "%s%s_%s_%s"%(Prefix, PartID,Visitid,i['FileNameTag'])
                 OutData = os.path.join(OutDataPath, OutDataName)
-                Str = 'applytopup --imain=%s --inindex=1 --method=jac --datain=%s --topup=%s --out=%s --verbose'%(InData, AcqFilePath, UnwarpedFilePath, OutData)
+                Str = 'applytopup --imain=%s --inindex=1 --method=jac --datain=%s --topup=%s --out=%s --verbose'%(InData, ApplyAcqFilePath, UnwarpedFilePath, OutData)
                 # print(Str)
                 print('\t>>> Running applytopup')
                 fidlog.write('\n\n')
