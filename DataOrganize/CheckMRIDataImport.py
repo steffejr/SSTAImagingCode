@@ -20,30 +20,34 @@ print('%s\n'%(LabName))
 print(DataPath)
 import MRIDataImport
 
+# Turn this flag on if you want the program to look for any missing data
+FindDataFlag = False
+
 def main():
-    # Find the base directory for data storage
+    
     BaseDir = MRIDataImport.FindBaseDirectory(LabName, StudyName, DataPath)
-    # Find the participant ID
-    PartID, Visitid = MRIDataImport.GetParticipantID()
-    Visitid = "V%03d"%(int(Visitid)) 
-    # What are the data folders?
-    RawMRIFolder, ProcMRIFolder, VisRawMRIFolder, VisProcMRIFolder = MRIDataImport.DataFolders(BaseDir, PartID, Visitid)
-    # Check to see if this participant is already in the system
-    success = MRIDataImport.CheckIfParticipantIsInSystem(RawMRIFolder, ProcMRIFolder, PartID)
-    # Ask the user if they want to continue if this part is in the system
-    if not success:
-        response = messagebox.askyesno('Participant: %s'%(PartID),'This participant is already in system. Do you want to continue?')
-        if not response:
-            return
-    # Check to see if this VISIT is already in the system
-    success = MRIDataImport.CheckIfVisitIsInSystem(VisRawMRIFolder, VisProcMRIFolder, PartID)
-    # Ask the user if they want to continue if this part is in the system
-    if not success:
-        response = messagebox.askyesno('Participant: %s, Visit: %s'%(PartID, Visitid),'This VISIT is already in system. Do you want to continue?')
-        if not response:
-            return
-    # Cycle over each folder for this participant and check to see if everything 
-    # is where it is expected
+    NewData = MakeListOfAllParticipants(BaseDir, AllImports)
+    # Load old data
+    BaseFileName = 'NCM_Master_MRIStatus'
+    AllOutDataFolder = os.path.join(os.path.split(BaseDir)[0:-1][0],'SummaryData')
+    ExistingDataFileName = LocateOutDataFile(BaseFileName, AllOutDataFolder)
+    print(ExistingDataFileName)
+    # Load the existing results file
+    if os.path.exists(ExistingDataFileName):
+        # # Found the existing data file
+        OldData = LoadOutDataFile(ExistingDataFileName)
+        # created an updated results datafram, respective in the "locked down" 
+        # data rows
+        UpdatedData = CreateUpdatedDataFrameOfResults(NewData, OldData)
+        # Create an updated output file name
+        UpdatedDataFileName = CreateOutFileName(AllOutDataFolder,BaseFileName)
+        # write out the updated data and move the old data file
+        WriteOutNewdataMoveOldData(UpdatedData, UpdatedDataFileName, ExistingDataFileName, AllOutDataFolder)   
+
+    else:
+        # There is no old data file
+        OldData = []
+        NewData.to_csv(ExistingDataFileName, index = False, float_format='%.3f')
 
 def MakeListOfAllParticipants(BaseDir, AllImports):
     # Cycle over all participant folders and check to see what has been reconstructed and 
@@ -59,16 +63,18 @@ def MakeListOfAllParticipants(BaseDir, AllImports):
         if (CurrentPart[0] == '1') or (CurrentPart[0] == '2'):
             print('Found one: %s'%(CurrentPart))
             VisProcMRIFolder = os.path.join(BaseDir,"ProcMRIData",CurrentPart,Visitid)
-            NewData = pd.Series(CheckAllFiles(AllImports, VisProcMRIFolder, CurrentPart, Visitid), index = df.columns)
+            NewData = pd.Series(CheckAllFiles(BaseDir, AllImports, VisProcMRIFolder, CurrentPart, Visitid), index = df.columns)
             df = df.append(NewData, ignore_index = True)
     return df
         
-def CheckAllFiles(AllImports, VisProcMRIFolder, PartID, Visitid):
+def CheckAllFiles(BaseDir, AllImports, VisProcMRIFolder, PartID, Visitid):
     # Cycle over the list of all data to import and check to see if the participant
     # has the data
     FoundFlag = []
     FoundFlag.append(PartID)
     FoundFlag.append(Visitid)    
+    # Add the checked flag
+    FoundFlag.append(0)
     for i in AllImports:
         # Ask the user to select the files according to the config file
         OutFileName =  "%s_%s_%s.%s"%(PartID,Visitid,i['FileNameTag'], i['Extension'])
@@ -78,7 +84,7 @@ def CheckAllFiles(AllImports, VisProcMRIFolder, PartID, Visitid):
         # Does this file exist?
         if os.path.exists(ExpectedFilePath):
             FoundFlag.append(1)
-        else:
+        elif FindDataFlag == True:
             # If it is not in the Proc folder, check to see if there is anythin 
             # in the Raw data folder
             RawMRIFolder = os.path.join(BaseDir,"RawMRIData",PartID,Visitid)
@@ -100,6 +106,8 @@ def CheckAllFiles(AllImports, VisProcMRIFolder, PartID, Visitid):
                     FindAndMoveFile(i, BaseDir, PartID, Visitid,VisProcMRIFolder)
             else:
                 print('\tDid not find raw copy or DICOM data')
+        else:
+            FoundFlag.append(0)
     return FoundFlag
 
 def WriteOutNewdataMoveOldData(UpdatedData, UpdatedDataFileName, ExistingDataFileName, AllOutDataFolder):
@@ -144,8 +152,9 @@ def CreateOutFileName(AllOutDataFolder, BaseFileName):
 def MakeListOfImportFiles(AllImports):
     # Make the column names for the table of found data
     ImportList = []
-    ImportList.append('PartID')
-    ImportList.append('Visitid')    
+    ImportList.append('AAPartid')
+    ImportList.append('AAVisid')    
+    ImportList.append('AAChecked')
     for i in AllImports:
         ImportList.append(i['FileNameTag'] + '_' + i['Extension'])
     return ImportList
@@ -177,30 +186,51 @@ def FindReconSingleDICOM(RawMRIFolder, Image):
             print("Could not find Image DICOM data")
     else:
         print("Could not find this Participants' DICOM data")
+        
+def CreateUpdatedDataFrameOfResults(NewData, OldData):    
+    # Extract the columns
+    ColName = []
+    for c in OldData.columns:
+        ColName.append(c)
+    
+    # Create a dataframe to hold teh updated data
+    OutDataFrame = pd.DataFrame(columns = ColName)
+    # Now cycle over each row and compare
+    for index, NewRow in NewData.iterrows():
+        # Add the new data
+    
+        NewDataSubId = NewRow['AAPartid']
+        NewDataVisitId = NewRow['AAVisid']
+#        print(NewDataSubId)
+#        print(NewDataVisitId)
+        # for each subid and visit found in the new data look for it in the old data
+        # If the same subid/visitid is found in both check the Old data column 
+        # labeled AAChecked to see if it is 1. If so then skip this data line in the new data 
+        # and go onto the next one.
+        
+        # If the value is 0 in the old data file, then the data line has NOT been checked 
+        # by a human and it is OK for this program to overwrite it.
+        # Data is written out as follows:
+        OldRow = OldData.loc[(OldData['AAPartid'] == int(NewDataSubId)) & (OldData['AAVisid'] == NewDataVisitId)] 
+        
+        if len(OldRow) > 0:
+            # found this data in the exisiting data file
+            # Check to see if the data has been checked by a human
+            if int(OldRow['AAChecked']) == 1:
+                # It has been checked
+                # write temp to the out data file
+                OutDataRow = OldRow
+            else:
+                # Data is in the out file but it has not been checked
+                OutDataRow = NewRow
+        else:
+            # Did not find the new data in the old data file
+            OutDataRow = NewRow
+        # Add OutDataRow to the updated out dataframe
+        OutDataFrame = OutDataFrame.append(OutDataRow)
+    return OutDataFrame        
 #                                                     
 if __name__ == "__main__":
-    BaseDir = MRIDataImport.FindBaseDirectory(LabName, StudyName, DataPath)
-    NewData = MakeListOfAllParticipants(BaseDir, AllImports)
-    # Load old data
-    BaseFileName = 'NCM_Master_MRIStatus'
-    AllOutDataFolder = os.path.join(os.path.split(BaseDir)[0:-1][0],'SummaryData')
-    ExistingDataFileName = LocateOutDataFile(BaseFileName, AllOutDataFolder)
-    print(ExistingDataFileName)
-    # Load the existing results file
-    if os.path.exists(ExistingDataFileName):
-        # # Found the existing data file
-        OldData = LoadOutDataFile(ExistingDataFileName)
-        # created an updated results datafram, respectivein the "locked down" 
-        # data rows
-        UpdatedData = CreateUpdatedDataFrameOfResults(NewData, OldData)
-        # Create an updated output file name
-        UpdatedDataFileName = CreateOutFileName(AllOutDataFolder,BaseFileName)
-        # write out the updated data and move the old data file
-        WriteOutNewdataMoveOldData(NewData, UpdatedDataFileName, ExistingDataFileName, AllOutDataFolder)   
-
-    else:
-        # There is no old data file
-        OldData = []
-        NewData.to_csv(ExistingDataFileName, index = False, float_format='%.3f')
+    main()
 
 # Locked down procedures...
