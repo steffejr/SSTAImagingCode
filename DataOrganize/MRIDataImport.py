@@ -14,42 +14,58 @@ _thisDir = os.path.dirname(os.path.abspath(__file__))
 # import parameters from a config file
 sys.path.append(os.path.join(_thisDir))
 from NCM002_Import_Config import *
-
-# Make this function also operate on existing data. So it would ask the user if 
-# existing data should be overwritten or not. New data will be added to an existing folder structure
+DataPath
 
 def main():
 
     # Find the base directory for data storage
-    BaseDir = FindBaseDirectory(LabName, StudyName)
+    BaseDir = FindBaseDirectory(LabName, StudyName, DataPath)
     # Find the participant ID
     PartID, Visitid = GetParticipantID()
     Visitid = "V%03d"%(int(Visitid)) 
     # What are the data folders?
     RawMRIFolder, ProcMRIFolder, VisRawMRIFolder, VisProcMRIFolder = DataFolders(BaseDir, PartID, Visitid)
-    # Check to see if this participant is already in teh system
+    # Check to see if this participant is already in the system
     success = CheckIfParticipantIsInSystem(RawMRIFolder, ProcMRIFolder, PartID)
     # Ask the user if they want to continue if this part is in the system
     if not success:
-        response = messagebox.askyesno('Partcipant: %s'%(PartID),'This participant is already in system. Do you want to continue?')
+        response = messagebox.askyesno('Participant: %s'%(PartID),'This participant is already in system. Do you want to continue?')
         if not response:
             return
-    # Check to see if this VISIT is already in teh system
+    # Check to see if this VISIT is already in the system
     success = CheckIfVisitIsInSystem(VisRawMRIFolder, VisProcMRIFolder, PartID)
     # Ask the user if they want to continue if this part is in the system
     if not success:
-        response = messagebox.askyesno('Partcipant: %s, Visit: %s'%(PartID, Visitid),'This VISIT is already in system. Do you want to continue?')
+        response = messagebox.askyesno('Participant: %s, Visit: %s'%(PartID, Visitid),'This VISIT is already in system. Do you want to continue?')
         if not response:
             return
-
+    # # Should previously reconstructed data be overwritten?
+    # OverWriteFlag = messagebox.askyesno('Overwrite','When reconstructing data should existing data be overwritten?')
+    # if OverWriteFlag:
+    #     OverWriteFlag = messagebox.askyesno('Sure?','Are you sure you want to overwrite?')
+    # if OverWriteFlag:
+    #     print('Existing data will be overwritten')
+        
+    # Take an already reconstructed data set in the Raw folder and rename and copy 
+    # any missing files to the Proc folder
+    
+    
     # Find the zip file of data
     PathToZipInput = PickZipdataFile()
+    # Add a check here. If the user does NOT pick a zip file the program can check 
+    # to see if the raw data was already downloaded and unzipped.
+    # It is possible that we may wish to simply re-reconstruct the raw data
     # Move the zip file
-    PathToZipInput = MoveZipFile(PathToZipInput, VisRawMRIFolder)
-    # Unzip the data file
-    UnZipData(PathToZipInput)
-    # untar the data file
-    CreatedDataFolder = UnTarData(VisRawMRIFolder, PathToZipInput)
+    if len(PathToZipInput) > 0:
+        print('Path to zip file: %s'%(PathToZipInput))
+        PathToZipInput = MoveZipFile(PathToZipInput, VisRawMRIFolder)
+
+        # Unzip the daPathToZipInputta file
+        UnZipData(PathToZipInput)
+        # untar the data file
+        CreatedDataFolder = UnTarData(VisRawMRIFolder, PathToZipInput)
+    else:
+        CreatedDataFolder = os.path.join(VisRawMRIFolder,os.listdir(VisRawMRIFolder)[0])
     # reconstruct the data
     ReconstructMRIData(VisRawMRIFolder, CreatedDataFolder)
     # Rename and move all files
@@ -58,15 +74,15 @@ def main():
     MakeStatsFolders(VisProcMRIFolder)
     messagebox.showinfo('Done','All Done with: %s, %s'%(PartID, Visitid))
     
-def FindBaseDirectory(LabName, StudyName):
-    # Start with this script's folder
-    ThisScript = os.path.dirname(os.path.realpath(__file__))
+def FindBaseDirectory(LabName, StudyName, DataPath):
     # Now find the Base folder
     # First, split the path
-    splitThisScript = ThisScript.split(os.path.sep)
+    splitThisScript = DataPath.split(os.path.sep)
     # Find where the lab name is
-    ind = splitThisScript.index(LabName)
-    BaseDir = os.path.join(*splitThisScript[0:ind+1])
+    # This also works if the lab name is in tha path name more then once. If so 
+    # the last time it appears is used.
+    indices = [i for i, x in enumerate(splitThisScript) if x == LabName]
+    BaseDir = os.path.join(*splitThisScript[0:indices[-1]+1])
     BaseDir = os.path.join(os.path.sep, BaseDir, StudyName, 'Data', 'Imaging')
     return BaseDir
 
@@ -112,6 +128,7 @@ def DataFolders(BaseDir, Subid, Visitid):
     return RawMRIFolder, ProcMRIFolder, VisRawMRIFolder, VisProcMRIFolder
 
 def ReconstructMRIData(VisRawMRIFolder, CreatedZipFolder):
+    print('Reconstructing data...')
     LogFileLocation = os.path.join(VisRawMRIFolder, 'ReconstructionLog.txt')
     #os.system("/Applications/mricron/ -d N -e Y -f N -g N -i N -n Y -o %s %s"%(VisRawMRIFolder,os.path.join(VisRawMRIFolder,os.path.basename(sys.argv[3]).split('.')[0])))
     os.system("/usr/bin/dcm2nii -d N -e Y -f N -g N -i N -n Y -t Y -o %s %s > %s"%(VisRawMRIFolder,CreatedZipFolder, LogFileLocation))
@@ -195,15 +212,15 @@ def CheckIfVisitIsInSystem(VisRawMRIFolder, VisProcMRIFolder, VisitID):
         success = False
     return success
 
-def MoveFile(FilePath, VisProcMRIFolder, Subid, Visitid, Type, Ext = 'nii'):
-    # make the folder
-    # make new name
-
-    OutName = "%s_%s_%s.%s"%(Subid,Visitid,Type, Ext)
-    os.mkdir(os.path.join(VisProcMRIFolder,Type))
-    os.mkdir(os.path.join(VisProcMRIFolder,Type,ProcessedNIIFileFolderName))
-    shutil.copy(FilePath,os.path.join(VisProcMRIFolder,Type,OutName))
-    shutil.copy(FilePath,os.path.join(VisProcMRIFolder,Type,ProcessedNIIFileFolderName,OutName))
+# def MoveFile(FilePath, VisProcMRIFolder, Subid, Visitid, Type, Ext = 'nii'):
+#     # make the folder
+#     # make new name
+# 
+#     OutName = "%s_%s_%s.%s"%(Subid,Visitid,Type, Ext)
+#     os.mkdir(os.path.join(VisProcMRIFolder,Type))
+#     os.mkdir(os.path.join(VisProcMRIFolder,Type,ProcessedNIIFileFolderName))
+#     shutil.copy(FilePath,os.path.join(VisProcMRIFolder,Type,OutName))
+#     shutil.copy(FilePath,os.path.join(VisProcMRIFolder,Type,ProcessedNIIFileFolderName,OutName))
 
 def NIIFile():
     # Ask the user to select the zip file
@@ -219,6 +236,8 @@ def MoveAllFiles(AllImports, RawMRIFolder, VisProcMRIFolder, PartID, Visitid):
             # Create the name of the file
             OutFileName =  "%s_%s_%s.%s"%(PartID,Visitid,i['FileNameTag'], i['Extension'])
             # Create the output path for the file
+            # Add another parameter to the AllImports structure naming the ouput folder
+            # which allows multiple images to reconstruct to the same folder
             OutFilePath = os.path.join(VisProcMRIFolder, i['FileNameTag'])
             MoveFile(filename, OutFileName, OutFilePath, i['FileNameTag'])
 
