@@ -2,8 +2,14 @@
 # I do not need a separate folder for images that should stay together. 
 # As an example, DTI and the two images for topup adjustment.
 
+# What is the name of the lab. We use this as a top level folder name 
 LabName = 'NCMLab'
+# Within the lab folder there is study folder
 StudyName = 'NCM002-MRIStudy'
+# What is the 
+DataPath = '/media/jsteffener/Data002/NCMLab'
+
+# DataPath = '/Volumes/GoogleDrive/Shared drives/NCMLab'
 # This is path the dcm2nii 
 # I anticipate since this file is saved in a synced folder that there should not be
 # multiple copies of this file on each computer. This may be a problem if there
@@ -26,77 +32,138 @@ AllImports = []
 thisEntry = {'Name' : 'DTI',
         'SearchString' : 'diff64dir',
         'FileNameTag' : 'DTI',                
-        'Extension' : 'nii'}       
+        'Foldername' : 'DTI',          
+        'Extension' : 'nii',
+        'ReconPathName':'diff_64dir_AP'}       
 AllImports.append(thisEntry)
 
 thisEntry = {'Name' : 'DTI bvec',
         'SearchString' : 'diff64dir',
-        'FileNameTag' : 'DTI',        
+        'FileNameTag' : 'DTI',     
+        'Foldername' : 'DTI',     
         'Extension' : 'bvec'}       
 AllImports.append(thisEntry)
 
 thisEntry = {'Name' : 'DTI bval',
         'SearchString' : 'diff64dir',
         'FileNameTag' : 'DTI',        
+        'Foldername' : 'DTI',               
         'Extension' : 'bval'}       
 AllImports.append(thisEntry)
+
+thisEntry = {'Name' : 'DTI Diff P>>A',
+        'SearchString' : 'diffPA',
+        'FileNameTag' : 'DTI_DiffPA',
+        'Foldername' : 'DTI',        
+        'Extension' : 'nii',
+        'ReconPathName':'diff_PA'}               
+AllImports.append(thisEntry)           
 
 thisEntry = {'Name' : 'T1',
         'SearchString' : 'MEMPRAGE',
         'FileNameTag' : 'T1',
-        'Extension' : 'nii'}       
+        'Foldername' : 'T1',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'MEMPRAGE'}       
 AllImports.append(thisEntry)
+
+thisEntry = {'Name' : 'fMRI Phase Mapping A>>P',
+        'SearchString' : 'fMRIRefAP',
+        'FileNameTag' : 'fMRI_Phase_AP',
+        'Foldername' : 'fMRI_Phase',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':False,
+        'ReconPathName':'fMRI_Ref_AP'}               
+AllImports.append(thisEntry)       
+
+thisEntry = {'Name' : 'fMRI Phase Mapping P>>A',
+        'SearchString' : 'fMRIRefPA',
+        'FileNameTag' : 'fMRI_Phase_PA',
+        'Foldername' : 'fMRI_Phase',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':False,
+        'ReconPathName':'fMRI_Ref_PA'}               
+AllImports.append(thisEntry)       
+
 
 thisEntry = {'Name' : 'DMS First Administration',
         'SearchString' : 'fMRI',
         'FileNameTag' : 'DMSRun1',
-        'Extension' : 'nii'}       
+        'Foldername': 'DMSRun1',
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'fMRI_2.5mm'}       
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'DMS Second Administration',
         'SearchString' : 'fMRI',
         'FileNameTag' : 'DMSRun2',
-        'Extension' : 'nii'}       
+        'Foldername' : 'DMSRun2',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'fMRI_2.5mm'}       
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'VSTM First Administration',
         'SearchString' : 'fMRI',
         'FileNameTag' : 'VSTMRun1',
-        'Extension' : 'nii'}       
+        'Foldername' : 'VSTMRun1',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'fMRI_2.5mm'}       
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'VSTM Second Administration',
         'SearchString' : 'fMRI',
         'FileNameTag' : 'VSTMRun2',
-        'Extension' : 'nii'}       
+        'Foldername' : 'VSTMRun2',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True,    
+        'ReconPathName':'fMRI_2.5mm'}
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'N-Back First Administration',
         'SearchString' : 'fMRI',
         'FileNameTag' : 'NBackRun1',
-        'Extension' : 'nii'}       
+        'Foldername' : 'NBackRun1',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'fMRI_2.5mm'}               
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'N-Back Second Administration',
         'SearchString' : 'fMRI',
         'FileNameTag' : 'NBackRun2',
-        'Extension' : 'nii'}       
+        'Foldername' : 'NBackRun2',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'fMRI_2.5mm'}
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'ASL',
         'SearchString' : '3DASL',
         'FileNameTag' : 'ASL',
-        'Extension' : 'nii'}       
+        'Foldername' : 'ASL',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'3DASL_multi'}
 AllImports.append(thisEntry)    
 
 thisEntry = {'Name' : 'ASL M0',
         'SearchString' : 'M03DASL',
         'FileNameTag' : 'ASLM0',
-        'Extension' : 'nii'}       
+        'Foldername' : 'ASL',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':False,
+        'ReconPathName':'M0_3DASL'}    
 AllImports.append(thisEntry)  
 
 thisEntry = {'Name' : 'NeuroMel',
         'SearchString' : 'goldStarNM',
         'FileNameTag' : 'NeuroMel',
-        'Extension' : 'nii'}       
+        'Foldername' : 'NeuroMel',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'goldStar_NM'}      
 AllImports.append(thisEntry)      
