@@ -3,18 +3,18 @@
 # As an example, DTI and the two images for topup adjustment.
 
 # What is the name of the lab. We use this as a top level folder name 
-LabName = 'NCMLab'
+LabName = 'JoanetteLab'
 # Within the lab folder there is study folder
-StudyName = 'NCM002-MRIStudy'
+StudyName = 'SSTA-MRIStudy'
 # What is the 
-DataPath = '/media/jsteffener/Data002/NCMLab'
+DataPath = '/Users/jasonsteffener/Documents/JoanetteLab/SSTA-MRIStudy'
 
 # This is path the dcm2nii 
 # I anticipate since this file is saved in a synced folder that there should not be
 # multiple copies of this file on each computer. This may be a problem if there
 # are differnet locations for mricron/dcm2nii
 
-dcm2niiPath = '/usr/bin/dcm2nii'
+dcm2niiPath = '/Applications/MRIcroMTL.app/Contents/Resources/dcm2niix'
 # Two copies of each MRI file will be made in the processed folder. One is an
 # original copy of the data that is NOT to be touched.
 OriginalNIIFileFolderName = 'OriginalFile'
@@ -23,146 +23,82 @@ OriginalNIIFileFolderName = 'OriginalFile'
 # version of the software is to be used then that is possible also.
 ProcessedNIIFileFolderName = 'spm12'
 # What folders need to be made for stats analyses
-StatsFoldersList = ['DMS', 'VSTM','NBack']
+StatsFoldersList = ['Semantic']
 # Extra useful folders
 ExtraFolders = ['jobs']
         
 AllImports = []
-thisEntry = {'Name' : 'DTI',
-        'SearchString' : 'diff64dir',
-        'FileNameTag' : 'DTI',                
-        'Foldername' : 'DTI',          
-        'Extension' : 'nii',
-        'ReconPathName':'diff_64dir_AP'}       
-AllImports.append(thisEntry)
 
-thisEntry = {'Name' : 'DTI bvec',
-        'SearchString' : 'diff64dir',
-        'FileNameTag' : 'DTI',     
-        'Foldername' : 'DTI',     
-        'Extension' : 'bvec'}       
-AllImports.append(thisEntry)
-
-thisEntry = {'Name' : 'DTI bval',
-        'SearchString' : 'diff64dir',
-        'FileNameTag' : 'DTI',        
-        'Foldername' : 'DTI',               
-        'Extension' : 'bval'}       
-AllImports.append(thisEntry)
-
-thisEntry = {'Name' : 'DTI Diff P>>A',
-        'SearchString' : 'diffPA',
-        'FileNameTag' : 'DTI_DiffPA',
-        'Foldername' : 'DTI',        
-        'Extension' : 'nii',
-        'ReconPathName':'diff_PA'}               
-AllImports.append(thisEntry)           
 
 thisEntry = {'Name' : 'T1',
-        'SearchString' : 'MEMPRAGE',
+        'SearchString' : 'T1w',
         'FileNameTag' : 'T1',
         'Foldername' : 'T1',        
         'Extension' : 'nii',
         'NeedAnalysisFolder':True,
-        'ReconPathName':'MEMPRAGE'}       
+        'ReconPathName':'T1w'}       
 AllImports.append(thisEntry)
 
-thisEntry = {'Name' : 'fMRI Phase Mapping A>>P',
-        'SearchString' : 'fMRIRefAP',
-        'FileNameTag' : 'fMRI_Phase_AP',
-        'Foldername' : 'fMRI_Phase',        
-        'Extension' : 'nii',
-        'NeedAnalysisFolder':False,
-        'ReconPathName':'fMRI_Ref_AP'}               
-AllImports.append(thisEntry)       
-
-thisEntry = {'Name' : 'fMRI Phase Mapping P>>A',
-        'SearchString' : 'fMRIRefPA',
-        'FileNameTag' : 'fMRI_Phase_PA',
-        'Foldername' : 'fMRI_Phase',        
-        'Extension' : 'nii',
-        'NeedAnalysisFolder':False,
-        'ReconPathName':'fMRI_Ref_PA'}               
-AllImports.append(thisEntry)       
-
-
-thisEntry = {'Name' : 'DMS First Administration',
-        'SearchString' : 'fMRI',
-        'FileNameTag' : 'DMSRun1',
-        'Foldername': 'DMSRun1',
-        'Extension' : 'nii',
-        'NeedAnalysisFolder':True,
-        'ReconPathName':'fMRI_2.5mm'}       
-AllImports.append(thisEntry)    
-
-thisEntry = {'Name' : 'DMS Second Administration',
-        'SearchString' : 'fMRI',
-        'FileNameTag' : 'DMSRun2',
-        'Foldername' : 'DMSRun2',        
-        'Extension' : 'nii',
-        'NeedAnalysisFolder':True,
-        'ReconPathName':'fMRI_2.5mm'}       
-AllImports.append(thisEntry)    
-
-thisEntry = {'Name' : 'VSTM First Administration',
-        'SearchString' : 'fMRI',
-        'FileNameTag' : 'VSTMRun1',
-        'Foldername' : 'VSTMRun1',        
-        'Extension' : 'nii',
-        'NeedAnalysisFolder':True,
-        'ReconPathName':'fMRI_2.5mm'}       
-AllImports.append(thisEntry)    
-
-thisEntry = {'Name' : 'VSTM Second Administration',
-        'SearchString' : 'fMRI',
-        'FileNameTag' : 'VSTMRun2',
-        'Foldername' : 'VSTMRun2',        
-        'Extension' : 'nii',
-        'NeedAnalysisFolder':True,    
-        'ReconPathName':'fMRI_2.5mm'}
-AllImports.append(thisEntry)    
-
-thisEntry = {'Name' : 'N-Back First Administration',
-        'SearchString' : 'fMRI',
-        'FileNameTag' : 'NBackRun1',
-        'Foldername' : 'NBackRun1',        
-        'Extension' : 'nii',
-        'NeedAnalysisFolder':True,
-        'ReconPathName':'fMRI_2.5mm'}               
-AllImports.append(thisEntry)    
-
-thisEntry = {'Name' : 'N-Back Second Administration',
-        'SearchString' : 'fMRI',
-        'FileNameTag' : 'NBackRun2',
-        'Foldername' : 'NBackRun2',        
-        'Extension' : 'nii',
-        'NeedAnalysisFolder':True,
-        'ReconPathName':'fMRI_2.5mm'}
-AllImports.append(thisEntry)    
-
 thisEntry = {'Name' : 'ASL',
-        'SearchString' : '3DASL',
+        'SearchString' : 'asl_2d',
         'FileNameTag' : 'ASL',
         'Foldername' : 'ASL',        
         'Extension' : 'nii',
         'NeedAnalysisFolder':True,
-        'ReconPathName':'3DASL_multi'}
+        'ReconPathName':'asl_2d'}
 AllImports.append(thisEntry)    
 
-thisEntry = {'Name' : 'ASL M0',
-        'SearchString' : 'M03DASL',
-        'FileNameTag' : 'ASLM0',
-        'Foldername' : 'ASL',        
-        'Extension' : 'nii',
-        'NeedAnalysisFolder':False,
-        'ReconPathName':'M0_3DASL'}    
-AllImports.append(thisEntry)  
 
-thisEntry = {'Name' : 'NeuroMel',
-        'SearchString' : 'goldStarNM',
-        'FileNameTag' : 'NeuroMel',
-        'Foldername' : 'NeuroMel',        
+thisEntry = {'Name' : 'Semantic Run 1',
+        'SearchString' : 'task-semantic_Run1',
+        'FileNameTag' : 'SemRun1',
+        'Foldername' : 'SemRun1',        
         'Extension' : 'nii',
         'NeedAnalysisFolder':True,
-        'ReconPathName':'goldStar_NM'}      
+        'ReconPathName':'task-semantic_Run1'}      
 AllImports.append(thisEntry)      
+
+thisEntry = {'Name' : 'Semantic Run 2',
+        'SearchString' : 'task-semantic_Run2',
+        'FileNameTag' : 'SemRun2',
+        'Foldername' : 'SemRun2',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'task-semantic_Run2'}      
+AllImports.append(thisEntry)      
+
+thisEntry = {'Name' : 'Resting State',
+        'SearchString' : 'task-Resting-state_Run1',
+        'FileNameTag' : 'Rest',
+        'Foldername' : 'Rest',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':True,
+        'ReconPathName':'task-Resting-state_Run1'}      
+AllImports.append(thisEntry)      
+
+thisEntry = {'Name' : 'fMRI Field Mapping ',
+        'SearchString' : 'task-fieldmap_Run1',
+        'FileNameTag' : 'FieldMapRun1',
+        'Foldername' : 'SemRun1',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':False,
+        'ReconPathName':'task-fieldmap_Run1'}               
+AllImports.append(thisEntry)       
+
+thisEntry = {'Name' : 'fMRI Field Mapping ',
+        'SearchString' : 'task-fieldmap_Run2',
+        'FileNameTag' : 'FieldMapRun2',
+        'Foldername' : 'SemRun2',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':False,
+        'ReconPathName':'task-fieldmap_Run2'}               
+AllImports.append(thisEntry)       
+
+thisEntry = {'Name' : 'fMRI Field Mapping ',
+        'SearchString' : 'task-fieldmap_Resting',
+        'FileNameTag' : 'FieldMapRest',
+        'Foldername' : 'Rest',        
+        'Extension' : 'nii',
+        'NeedAnalysisFolder':False,
+        'ReconPathName':'task-fieldmap_Resting'}               
+AllImports.append(thisEntry)       

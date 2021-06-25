@@ -8,7 +8,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 from tkinter import *
 
-from PyQt4.QtGui import *
+from PyQt5.QtWidgets import *
 import pathlib
 _thisDir = os.path.dirname(os.path.abspath(__file__))
 # import parameters from a config file
@@ -19,6 +19,9 @@ DataPath
 def main():
 
     # Find the base directory for data storage
+    print("Lab name: %s"%(LabName))
+    print("Study name: %s"%(StudyName))
+    print("Data Path: %s"%(DataPath))    
     BaseDir = FindBaseDirectory(LabName, StudyName, DataPath)
     # Find the participant ID
     PartID, Visitid = GetParticipantID()
@@ -131,7 +134,8 @@ def ReconstructMRIData(VisRawMRIFolder, CreatedZipFolder):
     print('Reconstructing data...')
     LogFileLocation = os.path.join(VisRawMRIFolder, 'ReconstructionLog.txt')
     #os.system("/Applications/mricron/ -d N -e Y -f N -g N -i N -n Y -o %s %s"%(VisRawMRIFolder,os.path.join(VisRawMRIFolder,os.path.basename(sys.argv[3]).split('.')[0])))
-    os.system("/usr/bin/dcm2nii -d N -e Y -f N -g N -i N -n Y -t Y -o %s %s > %s"%(VisRawMRIFolder,CreatedZipFolder, LogFileLocation))
+    print("%s -o %s %s > %s"%(dcm2niiPath, VisRawMRIFolder,CreatedZipFolder, LogFileLocation))
+    os.system("%s -o %s %s > %s"%(dcm2niiPath, VisRawMRIFolder,CreatedZipFolder, LogFileLocation))
     
 def UnTarData(VisRawMRIFolder, ZipFileName):
     # Un tar the file
@@ -231,7 +235,7 @@ def NIIFile():
 def MoveAllFiles(AllImports, RawMRIFolder, VisProcMRIFolder, PartID, Visitid):
     for i in AllImports:
         # Ask the user to select the files according to the config file
-        filename = SelectOneFile(i, RawMRIFolder)
+        filename = SelectOneFile(RawMRIFolder, i)
         if len(filename) > 0:
             # Create the name of the file
             OutFileName =  "%s_%s_%s.%s"%(PartID,Visitid,i['FileNameTag'], i['Extension'])
@@ -263,23 +267,35 @@ def MoveFile(InFilePath, OutFileName, OutFilePath, Tag):
     # Copy the file
     shutil.copy(InFilePath, os.path.join(OutFilePath, OriginalNIIFileFolderName, OutFileName))
     shutil.copy(InFilePath, os.path.join(OutFilePath, ProcessedNIIFileFolderName, OutFileName))
-    
-def SelectOneFile(InputDict, RawMRIFolder):    
-   # Check to see if the Qt  is already created.
-   # If two instances are created the kernel crashes 
-    app = QApplication.instance()
-    if app is None:
-        app = QApplication(sys.argv)
-    w = QFileDialog()
-    # Set window size.
-    w.resize(320, 240)
-    # Set window title
-    w.setWindowTitle("Hello World!")    
+
+def SelectOneFile(RawMRIFolder, InputDict):
+    """
+    Select a file via a dialog and return the file name.
+    """
+    try:
+        from PyQt5.QtWidgets import QApplication, QFileDialog
+    except ImportError:
+        try:
+            from PyQt4.QtGui import QApplication, QFileDialog
+        except ImportError:
+            from PySide.QtGui import QApplication, QFileDialog
+
+
     title = 'Select the %s file'%(InputDict['Name'])
     TypeFilter = '%s(*%s*.%s)'%(InputDict['FileNameTag'],InputDict['SearchString'],InputDict['Extension'])
-    filename = QFileDialog.getOpenFileName(w, title, RawMRIFolder, TypeFilter)
-    app.exec_()
-    return filename
+    TypeFilter = '*%s*.%s'%(InputDict['SearchString'],InputDict['Extension'])
+    #TypeFilter = '*asl*.nii'
+    print("On a MAC the title is not shown on the selection box!")
+    print(title)
+    print(TypeFilter)
+    app = QApplication([RawMRIFolder])
+    fname = QFileDialog.getOpenFileName(None, title,
+                                        RawMRIFolder, filter=TypeFilter)
+    if isinstance(fname, tuple):
+        return fname[0]
+    else:
+        return str(fname) 
+    
 
 def MakeStatsFolders(VisProcMRIFolder):
     os.mkdir(os.path.join(VisProcMRIFolder, 'fMRIStats'))
@@ -299,5 +315,5 @@ def MakeStatsFolders(VisProcMRIFolder):
             print('Folder: %s already exists'%(tempFolder))
 
 if __name__ == "__main__":
-    main()
+     main()
 
